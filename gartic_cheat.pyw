@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 import win32api, win32con,time,os
+import keyboard
 
 window = (820,330)
 bar_y = 968
@@ -13,17 +14,12 @@ def click(x,y):
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
 
 def draw(i:int,x:int,y:int):
-
     global last_color
     if i < 240:
         if last_color != i:
             last_color = i
             click(1460-int(i*(215/255)), 968)
         click(x, y)
-    #elif i < 200:                      # < white niet nodig
-    #    pyautogui.click(660, 470)
-    #    pyautogui.click(x, y)
-        #return colors['white']
 
 if __name__ == "__main__":
     global last_color
@@ -43,7 +39,6 @@ if __name__ == "__main__":
     img = Image.open('greyscale.png')
     array = np.array(img)
 
-
     _x=window[0]
     _y=window[1]
 
@@ -52,8 +47,12 @@ if __name__ == "__main__":
             time.sleep(0.002)
             draw(x[0],_x,_y)
             _x+=4
+            if keyboard.is_pressed('esc'):
+                break
         _x = window [0]
         _y+=4
+        if keyboard.is_pressed('esc'):
+            break
 
     os.remove('greyscale.png')
-    os.remove(file_name)               # <- useful
+    os.remove(file_name) 
